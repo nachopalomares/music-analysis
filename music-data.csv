@@ -1,4 +1,4 @@
-Artist Name,Track Name,Popularity,danceability,energy,key,loudness,mode,speechiness,acousticness,liveness,valence,tempo,duration_in min/ms,time_signature,release_year
+Artist Name,Track Name,popularity,danceability,energy,key,loudness,mode,speechiness,acousticness,liveness,valence,tempo,duration_in min/ms,time_signature,release_year
 Nathan Goshen,26,39.0,0.471,0.832,1.0,-5.606,0,0.12,0.0333,0.0937,0.679,193.946,197773.0,4,2019
 Ohmme,3 2 4 3,31.0,0.449,0.684,7.0,-8.116,1,0.0358,0.0925,0.104,0.306,129.585,245506.0,1,2020
 The Black Crowes,30 Days In The Hole,41.0,0.566,0.895,9.0,-4.056,1,0.0406,0.0563,0.151,0.702,120.118,226720.0,4,1999
