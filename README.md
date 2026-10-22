@@ -95,8 +95,8 @@ Tested with **Python 3.12.14** and the pinned dependencies in
 after obtaining the repository and installing the dependencies.
 
 ```bash
-git clone https://github.com/nachopalomares/DataMining.git
-cd DataMining
+git clone https://github.com/nachopalomares/music-analysis.git
+cd music-analysis
 python3.12 -m venv .venv
 source .venv/bin/activate
 python -m pip install -r requirements.txt
