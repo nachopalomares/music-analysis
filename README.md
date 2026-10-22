@@ -1,10 +1,9 @@
 # Music Data Analysis
 
-Exploring song profiles and the limits of popularity classification with Python.
+Exploratory analysis of song features, clustering and popularity using Python.
 
-Can audio features form interpretable groups of songs, and do they help classify popularity
-for artists absent from the training data? This project investigates those questions through
-data validation, visual exploration, clustering and a comparison of three classifiers.
+This project looks at relationships between audio features, groups tracks with similar
+profiles and compares three simple classifiers on artists held out of training.
 
 **[Read the executed notebook](music_analysis.ipynb)** for the complete analysis and its outputs.
 
@@ -12,53 +11,46 @@ data validation, visual exploration, clustering and a comparison of three classi
 
 ## Data and scope
 
-The included CSV contains **795 records and 16 columns**, with release years from
+The CSV contains **795 records and 16 columns**, with release years from
 1927 to 2023. It includes artist and track names, a popularity score and
 audio descriptors such as danceability, energy, loudness, acousticness, valence and tempo.
 
-The notebook removes 3 exact duplicate rows from its working copy,
-leaving **792 records**. The original CSV is unchanged. One repeated
-artist/title pair has conflicting release years and remains flagged rather than arbitrarily
-corrected. Some titles also have apparent encoding damage.
+After removing 3 exact duplicate rows, **792 records**
+remain. The original CSV is unchanged. One repeated artist/title pair has conflicting release
+years and is kept for inspection. Some titles have apparent encoding errors.
 
 About 76% of the analysed records date from 2000 onwards; the 1930s have
 just one record. The analysis describes this sample rather than the history of music.
 
-The project author identifies [Music Genre Classification on Kaggle](https://www.kaggle.com/datasets/purumalgi/music-genre-classification)
-as the source. The uploader, Purushottam Malgi, credits a MachineHack hackathon.
-This CSV is an adapted extract: it omits the documented `instrumentalness` and genre `Class`
-columns and includes `release_year`, absent from the source card's schema. The selection and
-transformation steps, including the origin of the years, have not been preserved. Decade plots
-therefore describe provisional local metadata. Kaggle labels the licence **Other (specified
-in description)**; this repository does not assume a standard open-data licence for the CSV.
+Source: [Music Genre Classification on Kaggle](https://www.kaggle.com/datasets/purumalgi/music-genre-classification),
+uploaded by Purushottam Malgi from a MachineHack exercise. This is an adapted extract: it omits
+`instrumentalness` and genre `Class`, and adds `release_year`. The preparation steps and origin
+of the years were not preserved, so decade plots should be treated cautiously. Kaggle lists
+the licence as **Other (specified in description)**; a standard open-data licence is not assumed.
 
 ## Approach
 
-- Validate the schema, missing values, finite numbers and expected numeric ranges.
-- Inspect distributions, correlations and decade coverage; retain IQR outliers for inspection.
-- Standardise four audio features and compare K-Means with k=2 through k=10 using silhouette
-  scores. Visualise the selected groups with PCA and compare with Ward clustering on a fixed
-  100-record sample using Adjusted Rand Index.
-- Compare Decision Tree, Random Forest and Gaussian Naive Bayes against a majority-class
-  baseline, using five-fold cross-validation that keeps artist groups separate.
-- Select the trained model using training CV only, then evaluate it and the baseline on a
-  separate artist-group test partition. Assertions check group separation and metric ranges.
+- Check data quality, inspect distributions and correlations, and flag IQR outliers.
+- Compare K-Means with k=2 through k=10 on four standardised audio features. Use silhouette
+  scores to select k and PCA to plot the groups.
+- Compare K-Means and Ward clustering on a fixed 100-record sample using Adjusted Rand Index.
+- Compare Decision Tree, Random Forest and Gaussian Naive Bayes with a majority-class baseline.
+  Use five-fold group cross-validation for selection, then a separate test set for evaluation.
 
 ## Findings
 
 ### Song clusters
 
 The highest silhouette score among the tested values selects **k=3**, with a score
-of **0.249**. The two PCA components retain **69.1%** of the
-variance. These groups describe audio profiles; they are not verified musical genres.
+of **0.249**. The PCA plot retains **69.1%** of the variance.
+The groups describe audio profiles rather than verified genres.
 
 ![Selected song clusters projected onto two principal components](assets/song_clusters.png)
 
 ### Popularity classification
 
-Class 1 means a recorded popularity score **strictly above 50**. This is a
-fixed illustrative threshold, not a forecast of future hits. It replaces the original
-sample-median target, so the previous notebook's scores are not directly comparable.
+Class 1 means a recorded popularity score **strictly above 50**. This fixed
+threshold defines the exercise; the model is not forecasting future hits.
 
 The split contains **641 training records from 588 artist
 groups** and **151 test records from 147 other artist groups**.
@@ -73,26 +65,21 @@ Training-only cross-validation results:
 | Decision Tree | 52.73% | 5.39% |
 | Majority baseline | 50.00% | 0.00% |
 
-The highest mean balanced accuracy selects **Gaussian Naive Bayes**. The standard deviation describes
-fold variation, not a confidence interval. Only the selected trained model and baseline are
-then evaluated on the test partition:
+Cross-validation selects **Gaussian Naive Bayes**. Fold standard deviation is not a confidence interval.
+Only that trained model and the baseline are then evaluated on the test set:
 
 | Model | Accuracy | Balanced accuracy | F1, class 1 | ROC AUC |
 | --- | --- | --- | --- | --- |
 | Majority baseline | 68.21% | 50.00% | 0.000 | 0.500 |
 | Gaussian Naive Bayes | 60.26% | 55.30% | 0.400 | 0.631 |
 
-The selected model improves balanced accuracy over the baseline but has lower overall
-accuracy. The baseline predicts the more frequent class every time. Balanced accuracy
-averages recall across both classes, making this trade-off visible. The results suggest
-limited discrimination in this experiment and do not establish a reliable advantage on
-other catalogues.
+Naive Bayes has higher balanced accuracy but lower overall accuracy than the baseline,
+which always predicts the more frequent class. Balanced accuracy averages recall across
+both classes. The improvement is modest and needs testing on more data.
 
 ## Reproduce the analysis
 
-Tested with **Python 3.12.14** and the pinned dependencies in
-[`requirements.txt`](requirements.txt). No API keys or external data downloads are required
-after obtaining the repository and installing the dependencies.
+Tested with **Python 3.12.14**. The CSV is included and no API keys are needed.
 
 ```bash
 git clone https://github.com/nachopalomares/music-analysis.git
@@ -111,16 +98,14 @@ the Jupyter interface:
 python -m nbconvert --to notebook --execute --inplace music_analysis.ipynb
 ```
 
-The notebook regenerates the charts in [`assets/`](assets/) and the numerical tables in
-[`results/`](results/), including [`summary.json`](results/summary.json). The committed
-notebook has been executed from a fresh kernel; all 13 code cells and the embedded checks passed.
+The notebook saves charts to [`assets/`](assets/) and tables to [`results/`](results/).
+The README's figures come from [`summary.json`](results/summary.json). All 13 code cells
+were run from a fresh kernel, including checks for artist overlap and valid metrics.
 
 ## Limitations and next step
 
-The sample is small and uneven, its transformations are undocumented, and one release-year
-conflict remains unresolved. The dataset has already been explored, so the test evaluation is not an
-external or prospective validation. Cluster stability, other catalogues, future periods and
-threshold sensitivity have not been tested.
-
-The next useful step is to document the extract's preparation and evaluate on a larger sample
-before adding model complexity.
+This is a small, previously explored sample. Its preparation is undocumented and one
+release-year conflict remains. Artist grouping relies on names, so aliases and collaborations
+can still overlap. Cluster stability and results on other catalogues, future periods or
+different thresholds have not been tested. Documenting the extract and obtaining a larger
+sample would be the next steps.
