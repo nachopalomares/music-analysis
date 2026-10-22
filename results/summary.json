@@ -1,0 +1,74 @@
+{
+  "raw_records": 795,
+  "analysis_records": 792,
+  "exact_duplicates_removed": 3,
+  "unresolved_repeated_track_groups": 1,
+  "year_min": 1927,
+  "year_max": 2023,
+  "share_since_2000": 0.7588383838383839,
+  "popularity_threshold": 50,
+  "selected_k": 3,
+  "silhouette": 0.2492267176939491,
+  "pca_variance_retained": 0.6909819855762243,
+  "hierarchical_ari": 0.5459024284300338,
+  "selected_model": "Gaussian Naive Bayes",
+  "train_records": 641,
+  "test_records": 151,
+  "train_artist_groups": 588,
+  "test_artist_groups": 147,
+  "cv_results": [
+    {
+      "model": "Majority baseline",
+      "accuracy_mean": 0.5881441509491546,
+      "balanced_accuracy_mean": 0.5,
+      "balanced_accuracy_std": 0.0
+    },
+    {
+      "model": "Decision Tree",
+      "accuracy_mean": 0.5459061031251908,
+      "balanced_accuracy_mean": 0.5272976090443817,
+      "balanced_accuracy_std": 0.05385697717564515
+    },
+    {
+      "model": "Random Forest",
+      "accuracy_mean": 0.5740680125740096,
+      "balanced_accuracy_mean": 0.5373255926463474,
+      "balanced_accuracy_std": 0.039823101087972636
+    },
+    {
+      "model": "Gaussian Naive Bayes",
+      "accuracy_mean": 0.5849339826344381,
+      "balanced_accuracy_mean": 0.5827262495862298,
+      "balanced_accuracy_std": 0.026884103726001033
+    }
+  ],
+  "test_results": [
+    {
+      "model": "Majority baseline",
+      "accuracy": 0.6821192052980133,
+      "balanced_accuracy": 0.5,
+      "f1": 0.0,
+      "roc_auc": 0.5
+    },
+    {
+      "model": "Gaussian Naive Bayes",
+      "accuracy": 0.6026490066225165,
+      "balanced_accuracy": 0.5529935275080906,
+      "f1": 0.4,
+      "roc_auc": 0.6312702265372168
+    }
+  ],
+  "correlations": {
+    "energy_loudness": 0.7740596141960984,
+    "energy_acousticness": -0.7641463746215112
+  },
+  "python": "3.12.14",
+  "versions": {
+    "numpy": "2.3.5",
+    "pandas": "2.2.3",
+    "scipy": "1.18.1",
+    "scikit-learn": "1.9.1",
+    "matplotlib": "3.11.2",
+    "seaborn": "0.13.2"
+  }
+}
